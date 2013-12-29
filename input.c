@@ -1,6 +1,6 @@
 #include "input.h"
 #include "builtin.h"
-
+#include "cmd.h"
 
 int prompt()
 {
@@ -17,10 +17,21 @@ int prompt()
 			perror("getline");
 			return -1;
 		}
-		proc_builtin(line);	
-
-		// do command
-
+		int len;
+		char** tokens=parse_cmd(line,&len);
+		/*char** tmp;*/
+		/*for(tmp=tokens;*tmp!=NULL;tmp++)*/
+			/*printf("token:%s\n",*tmp);*/
+		if(proc_builtin(tokens,len))
+		{
+			// User has input a builtin command
+			continue;
+		}
+		else
+		{
+			// Not builtin,Execute the command
+			do_cmd(tokens,len);
+		}
 	}
 }
 

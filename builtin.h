@@ -1,10 +1,11 @@
 #include "common.h"
 
-typedef void* (*func)(void*);
+typedef void* (*func)(char**,int len);
 
 // builtin function implementations
-void* ts_exit(void* arg);
-void* ts_cd(void* arg);
+void* ts_exit(char** arg,int len);
+void* ts_cd(char** arg,int len);
+void* ts_pwd(char** arg,int len);
 
 struct cmdfunc
 {
@@ -14,5 +15,5 @@ struct cmdfunc
 
 
 
-int proc_builtin(char* cmd);
+int proc_builtin(char** tokens,int len);
 
