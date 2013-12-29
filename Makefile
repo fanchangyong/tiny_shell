@@ -1,7 +1,7 @@
 .PHONY: all
 
 SRC=ts.c cmd.c input.c builtin.c
-HEADERS=cmd.h common.h input.h builtin.h
+HEADERS=$(SRC:.c=.h)
 OBJ=$(SRC:.c=.o)
 
 all:ts tags
