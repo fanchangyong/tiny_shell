@@ -43,7 +43,6 @@ int find_cmd(char* cmd,char* path,int len)
 			return 1;
 		}
 	}
-	printf("pathenv:%s\n",pathenv);
 	return 0;
 }
 
@@ -58,10 +57,30 @@ int do_cmd(char** tokens,int len)
 	{
 		// child
 		// do the command
-		char* cmd=tokens[0];
 		char path[1024];
 		bzero(path,1024);
-		if(find_cmd(cmd,path,1024))
+		char* cmd=tokens[0];
+
+		int execute=0;
+		if(cmd[0]=='/')
+		{
+			execute=1;
+			strncpy(path,cmd,strlen(cmd));
+		}
+		else
+		{
+			if(find_cmd(cmd,path,1024))
+			{
+				// found command
+				execute=1;
+			}
+			else
+			{
+				execute=0;
+				printf("cannot find cmd:%s\n",cmd);
+			}
+		}
+		if(execute)
 		{
 			char** args=&tokens[1];
 			if(-1==execv(path,args))
@@ -69,10 +88,6 @@ int do_cmd(char** tokens,int len)
 				perror("execv");
 				return -1;
 			}
-		}
-		else
-		{
-			printf("cannot find cmd:%s\n",cmd);
 		}
 	}
 	else
