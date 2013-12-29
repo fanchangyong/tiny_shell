@@ -8,9 +8,15 @@ all:ts tags
 
 ts:$(OBJ)
 	cc -o $@ $^
-	rm -f $(OBJ)
+	#rm -f $(OBJ)
 
 tags:ts
 	ctags -R
+
+.PHONY:cl
+
+# clean up
+cl:
+	rm -f $(OBJ) tags
 
 .o.c:.h
