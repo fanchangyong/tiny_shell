@@ -2,6 +2,8 @@
 #include "builtin.h"
 #include "cmd.h"
 
+extern int errno;
+
 int prompt()
 {
 	char* line=NULL;
@@ -11,9 +13,16 @@ int prompt()
 	{
 		printf("Tiny Shell # ");
 		fflush(stdout);
+		fpurge(stdout);
 		linelen=getline(&line,&linecap,stdin);
 		if(linelen==-1)
 		{
+			if(errno==EINTR || errno==0)
+			{
+				printf("\n");
+				clearerr(stdin);
+				continue;
+			}
 			perror("getline");
 			return -1;
 		}

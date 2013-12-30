@@ -5,3 +5,5 @@
 #include <string.h>
 #include <pwd.h>
 #include <dirent.h>
+#include <signal.h>
+#include <errno.h>

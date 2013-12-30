@@ -1,3 +1,5 @@
 1.support job control
 2.signal support(ctrl-c,ctrl-z)
 3.I/O redirection and pipe
+
+

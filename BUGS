@@ -1,0 +1,1 @@
+1.waitpid doesn't return when child process execv error.

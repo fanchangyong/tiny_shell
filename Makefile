@@ -1,6 +1,6 @@
 .PHONY: all
 
-SRC=ts.c cmd.c input.c builtin.c
+SRC=ts.c cmd.c input.c builtin.c ts_sig.c
 HEADERS=$(SRC:.c=.h)
 OBJ=$(SRC:.c=.o)
 

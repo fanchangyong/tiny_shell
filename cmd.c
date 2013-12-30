@@ -48,40 +48,44 @@ int find_cmd(char* cmd,char* path,int len)
 
 int do_cmd(char** tokens,int len)
 {
-	pid_t pid=fork();
-	if(pid==-1)
+	char path[1024];
+	bzero(path,1024);
+	char* cmd=tokens[0];
+	if(strcmp(cmd,"")==0)
 	{
-		perror("fork");
+		return 0;
 	}
-	else if(pid==0)
-	{
-		// child
-		// do the command
-		char path[1024];
-		bzero(path,1024);
-		char* cmd=tokens[0];
 
-		int execute=0;
-		if(cmd[0]=='/')
+	int execute=0;
+	if(cmd[0]=='/')
+	{
+		execute=1;
+		strncpy(path,cmd,strlen(cmd));
+	}
+	else
+	{
+		if(find_cmd(cmd,path,1024))
 		{
+			// found command
 			execute=1;
-			strncpy(path,cmd,strlen(cmd));
 		}
 		else
 		{
-			if(find_cmd(cmd,path,1024))
-			{
-				// found command
-				execute=1;
-			}
-			else
-			{
-				execute=0;
-				printf("cannot find cmd:%s\n",cmd);
-			}
+			execute=0;
+			printf("cannot find cmd:%s\n",cmd);
 		}
-		if(execute)
+	}
+	if(execute)
+	{
+		pid_t pid=fork();
+		if(pid==-1)
 		{
+			perror("fork");
+		}
+		else if(pid==0)
+		{
+			// child
+			// do the command
 			char** args=&tokens[1];
 			if(-1==execv(path,args))
 			{
@@ -89,19 +93,19 @@ int do_cmd(char** tokens,int len)
 				return -1;
 			}
 		}
-	}
-	else
-	{
-		// parent
-		// to wait for child process 
-		int stat;
-		if(-1==waitpid(pid,&stat,0))
+		else
 		{
-			perror("waitpid");
-			return -1;
+			// parent
+			// to wait for child process 
+			int stat;
+			if(-1==waitpid(pid,&stat,0))
+			{
+				perror("waitpid");
+				return -1;
+			}
+			/*if(stat!=0)*/
+				/*printf("child stat:%d\n",stat);*/
 		}
-		/*if(stat!=0)*/
-			/*printf("child stat:%d\n",stat);*/
 	}
 	return 0;
 }
