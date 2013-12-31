@@ -1,31 +1,20 @@
 #include "input.h"
 #include "builtin.h"
 #include "cmd.h"
+#include <readline/readline.h>
 
 extern int errno;
 
 int prompt()
 {
-	char* line=NULL;
-	size_t linecap = 0;
-	size_t linelen = 0;
+	const char prompt_str[]="Tiny Shell # ";
+	char* line;
 	for(;;)
 	{
-		printf("Tiny Shell # ");
-		fflush(stdout);
-		fpurge(stdout);
-		linelen=getline(&line,&linecap,stdin);
-		if(linelen==-1)
-		{
-			if(errno==EINTR || errno==0)
-			{
-				printf("\n");
-				clearerr(stdin);
-				continue;
-			}
-			perror("getline");
+		line=readline(prompt_str);
+		if(!line)
 			return -1;
-		}
+		add_history(line);
 		int len;
 		char** tokens=parse_cmd(line,&len);
 		/*char** tmp;*/
