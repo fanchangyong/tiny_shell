@@ -90,7 +90,7 @@ int do_cmd(char** tokens,int len)
 			if(-1==execv(path,args))
 			{
 				perror("execv");
-				return -1;
+				exit(-1);
 			}
 		}
 		else
