@@ -86,7 +86,7 @@ int do_cmd(char** tokens,int len)
 		{
 			// child
 			// do the command
-			char** args=&tokens[1];
+			char** args=&tokens[0];
 			if(-1==execv(path,args))
 			{
 				perror("execv");
