@@ -13,7 +13,5 @@ struct cmdfunc
 	func  handler;
 };
 
-
-
 int proc_builtin(char** tokens,int len);
-
+int is_builtin(char* cmd);

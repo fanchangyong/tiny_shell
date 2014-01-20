@@ -8,8 +8,9 @@ LIB=readline
 all:ts tags
 
 ts:$(OBJ)
-	cc -l$(LIB) -o $@ $^
+	cc -g -l$(LIB) -o $@ $^
 	#rm -f $(OBJ)
+
 
 tags:ts
 	ctags -R

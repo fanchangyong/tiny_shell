@@ -1,13 +1,28 @@
 #include "builtin.h"
 
-struct cmdfunc (builtin_cmds[3])=
+struct cmdfunc (builtin_cmds[4])=
 {
+	{"e",ts_exit},
 	{"exit",ts_exit},
 	{"cd",ts_cd},
 	{"pwd",ts_pwd},
 };
 
 #define BUILTIN_CMD_COUNT (sizeof(builtin_cmds)/sizeof(struct cmdfunc))
+
+int is_builtin(char* cmd)
+{
+	int i;
+	for(i=0;i<BUILTIN_CMD_COUNT;++i)
+	{
+		struct cmdfunc cf=builtin_cmds[i];
+		if(strcmp(cf.name,cmd)==0)
+		{
+			return 1;
+		}
+	}
+	return 0;
+}
 
 int proc_builtin(char** tokens,int len)
 {
